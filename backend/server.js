@@ -28,20 +28,22 @@ app.get('/health', (req, res) => {
 
 // 数据库连接
 const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
-mongoose.connect(mongoUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log('数据库连接成功');
-  // 设置定时任务
-  setupCronJobs();
-  // 启动服务器
-  app.listen(PORT, () => {
-    console.log(`服务器运行在端口 ${PORT}`);
+if (mongoUri) {
+  mongoose.connect(mongoUri)
+  .then(() => {
+    console.log('数据库连接成功');
+    // 设置定时任务
+    setupCronJobs();
+  })
+  .catch((error) => {
+    console.error('数据库连接失败:', error);
+    console.warn('数据库功能将不可用');
   });
-})
-.catch((error) => {
-  console.error('数据库连接失败:', error);
-  process.exit(1);
+} else {
+  console.warn('未配置数据库连接字符串，数据库功能将不可用');
+}
+
+// 启动服务器
+app.listen(PORT, () => {
+  console.log(`服务器运行在端口 ${PORT}`);
 });

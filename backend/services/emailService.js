@@ -2,16 +2,28 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // 创建邮件传输器
-const transporter = nodemailer.createTransporter({
-  service: process.env.EMAIL_SERVICE,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+let transporter;
+try {
+  transporter = nodemailer.createTransporter({
+    service: process.env.EMAIL_SERVICE,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+} catch (error) {
+  console.error('邮件传输器创建失败:', error);
+  console.warn('邮件功能将不可用');
+  transporter = null;
+}
 
 // 发送验证码邮件
 const sendVerificationCode = async (email, code) => {
+  if (!transporter) {
+    console.warn('邮件传输器未初始化，无法发送验证码邮件');
+    return;
+  }
+  
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -33,12 +45,17 @@ const sendVerificationCode = async (email, code) => {
     console.log('验证码邮件已发送');
   } catch (error) {
     console.error('发送验证码邮件失败:', error);
-    throw error;
+    // 不再抛出错误，避免影响整个服务
   }
 };
 
 // 发送匹配结果邮件
 const sendMatchResult = async (email, matchEmail, matchScore) => {
+  if (!transporter) {
+    console.warn('邮件传输器未初始化，无法发送匹配结果邮件');
+    return;
+  }
+  
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -63,7 +80,7 @@ const sendMatchResult = async (email, matchEmail, matchScore) => {
     console.log('匹配结果邮件已发送');
   } catch (error) {
     console.error('发送匹配结果邮件失败:', error);
-    throw error;
+    // 不再抛出错误，避免影响整个服务
   }
 };
 
