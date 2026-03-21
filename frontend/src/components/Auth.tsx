@@ -130,9 +130,6 @@ const Auth: React.FC = () => {
               <p className="text-blue-800 text-sm mt-1">
                 <strong>后续登录</strong>：可直接使用密码登录
               </p>
-              <p className="text-blue-800 text-sm mt-1">
-                <strong>支持邮箱</strong>：@fudan.edu.cn 和 @m.fudan.edu.cn
-              </p>
             </div>
 
             {/* 标签切换 */}
