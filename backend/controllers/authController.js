@@ -14,8 +14,8 @@ exports.sendVerificationCode = async (req, res) => {
     const { email } = req.body;
 
     // 验证邮箱格式
-    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.edu\.cn$/.test(email)) {
-      return res.status(400).json({ message: '请输入有效的教育邮箱（后缀为edu.cn）' });
+    if (!/^[a-zA-Z0-9._%+-]+@(m\.)?fudan\.edu\.cn$/.test(email)) {
+      return res.status(400).json({ message: '请输入有效的复旦大学邮箱（@fudan.edu.cn 或 @m.fudan.edu.cn）' });
     }
 
     // 生成验证码

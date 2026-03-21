@@ -9,9 +9,9 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: {
       validator: function(v) {
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.edu\.cn$/.test(v);
+        return /^[a-zA-Z0-9._%+-]+@(m\.)?fudan\.edu\.cn$/.test(v);
       },
-      message: '请输入有效的教育邮箱（后缀为edu.cn）'
+      message: '请输入有效的复旦大学邮箱（@fudan.edu.cn 或 @m.fudan.edu.cn）'
     }
   },
   password: {
